@@ -53,9 +53,18 @@ let listaPlatillos = [
 let divContenido = document.getElementById("contenido");
 
 let htmlTarjetas = "";
+let fotosComida = "";
 
 listaPlatillos.forEach(function(plato){
+
   htmlTarjetas = htmlTarjetas + `<div class="tarjeta"><h2>${plato.nombre}</h2></div>`;
+  fotosComida = fotosComida+ `<div class="fotos"><img src=${plato.imagen}></div>`;
+  
+  
 })
 
 divContenido.innerHTML = htmlTarjetas;
+divContenido.innerHTML = fotosComida;
+
+
+
