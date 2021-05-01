@@ -49,22 +49,95 @@ let listaPlatillos = [
   }
 ];
 
-// 1. Siempre obtengamos los elementos que usaremos del HTML.
+let carrito = [];
+
+//1. siempre obtengamos los elementos que utilizaremos del HTML
 let divContenido = document.getElementById("contenido");
 
 let htmlTarjetas = "";
-let fotosComida = "";
 
+//transformando arreglo en html
 listaPlatillos.forEach(function(plato){
-
-  htmlTarjetas = htmlTarjetas + `<div class="tarjeta"><h2>${plato.nombre}</h2></div>`;
-  fotosComida = fotosComida+ `<div class="fotos"><img src=${plato.imagen}></div>`;
-  
-  
-})
+  htmlTarjetas = htmlTarjetas + `<div class="tarjeta">
+                                    <div class="imagen">
+                                      <img src="${plato.imagen}" alt="${plato.nombre}">
+                                    </div>
+                                    <div class="texto">
+                                      <h4>${plato.nombre}</h4>
+                                      <p>${plato.descripcion}</p>
+                                      <div class="precio">
+                                        <span>S/ ${plato.precio}</span>
+                                        <button class="btn-agregar" data-idplato="${plato.id}">
+                                          Agregar
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>`;
+});
 
 divContenido.innerHTML = htmlTarjetas;
-divContenido.innerHTML = fotosComida;
 
+let buscarPlatoPorId = function(id){
+  for(let i = 0; i < listaPlatillos.length; i++){
+    //le vamos a pasar solamente un id y nos va a retornar todo el objeto
+    if(id === listaPlatillos[i].id){
+      return listaPlatillos[i]; //aca retorno el objeto que coincida con el id que le haya pasado
+    }
+  }
+};
 
+//esta función recibirá un objeto con todo el plato, y a partir de ese objeto creamos un pedido con la cantidad del plato, platoApedir el parametro de la función sera un objeto
+let agregarACarrito = function(platoAPedir){
+  let pedido = {
+    plato:platoAPedir,
+    cantidad:1
+  }
+  //lo agregamos a la variable carrito
+  carrito.push(pedido)
+}
 
+//Obtenemos los btns-agregar, después que cambiamos el innerHTML de divContenido con las tarjetas
+//para que esas tarjetas esten en el DOM
+//Obtenemos un HTML Collection que los podemos tratar como un arreglo
+//querySelectorAll(".btn-agregar")
+let btnsAgregar = document.getElementsByClassName("btn-agregar");
+
+//Si nos queremos asegurar que sea un arreglo (de tipo Array)
+let arrayBotonesAgregar = Array.from(btnsAgregar);
+// console.log(arrayBotonesAgregar)
+
+//recorremos el arreglo, y por cada iteración obtenemos c/botón 1 x 1
+arrayBotonesAgregar.forEach(function(boton){
+  //y por cada boton que recorramos le vamos a añadir un listener, del evento click
+  boton.addEventListener("click", function(evento){
+
+    //Necesito saber que botón estoy presionando, entonces lke agregamos un atributo personalizado al botón.
+    //el atributo data-idplato
+    //Y lo siguiente que hacemos es obtener el valor de ese atributo con el método getAttribute
+    //Gracias a que event.target hace referencia al mismo objeto HTML del que estamos capturando el evento
+    let idPlato = evento.target.getAttribute("data-idplato");
+    //Después que obtuvimos el idPlato
+    let platoObtenido = buscarPlatoPorId(+idPlato); //vuelvo a encontrar el Plato, le pongo un + por delante para que sea Number
+    //agregamos al carrito el plato
+    agregarACarrito(platoObtenido);
+    console.log(carrito);
+  })
+});
+
+//AQUI voy a poner la parte que me permita mostrar el carrito en la parte derecha
+//Tengo que usar mi variable carrito para convertirlo a HTML
+//Recuerden revisar la estructura del Array carrito, para que sepan que propiedades necesitan
+//Verifiquen como es la estructura HTML que esta dentro de tbody-carrito, en el preview
+//En el canal de Front lo van poniendo
+carrito.forEach(function(e){
+  console.log(e);
+})
+
+//TODO for tomorrow
+//1. A partir de una Array, mostrar estos objetos dentro del navegador
+
+//2. Cuando demos click al botón agregar de cada platillo, este se agregue al carrito de compras de la derecha.
+
+//3. Agrupar productos.
+
+//4. mostrar la fecha, hacer que ese menu funcione, y conquistar el mundo...

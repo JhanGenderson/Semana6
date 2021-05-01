@@ -52,6 +52,7 @@ main{
 
 .imagen{
   height:250px;
+  overflow: hidden;
 }
 
 .imagen > img {
